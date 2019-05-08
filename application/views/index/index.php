@@ -33,11 +33,15 @@
     <el-header>文件批量修改器</el-header>
     <el-main>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form-item>
+                <el-input v-model="formInline.passport" value="<?php echo md5($rsf);?>" type="hidden"></el-input>
+            </el-form-item>
             <el-form-item label="搜索文件名">
-                <el-input v-model="formInline.user" placeholder="（例如:index.html）"></el-input>
+
+                <el-input v-model="formInline.filename" placeholder="（例如:index.html）" ></el-input>
             </el-form-item>
             <el-form-item label="搜索区域">
-                <el-select v-model="formInline.region" placeholder="搜索区域">
+                <el-select v-model="formInline.path" placeholder="搜索区域">
                     <?php foreach ($mulu as $v): ?>
                     <el-option label="<?=$v;?>" value="<?=$v;?>"></el-option>
                     <?php endforeach;?>
@@ -62,23 +66,24 @@
         data() {
             return {
                 formInline: {
-                    user: '',
-                    region:''
+                    filename: '',
+                    path:'',
+                    passport:"<?php echo $rsf;?>"
                 }
             }
         },
         methods: {
             onSubmit() {
-                axios({
-                    method:'post',
-                    url:'/search.html',
-                    data:{
-                        path:'application'
+                axios.get('/stasf/sesdfc', {
+                    params: {
+                        filename:this.formInline.filename,
+                        path: this.formInline.path,
+                        passport:this.formInline.passport
                     }
-                }).then(function(resp){
-                    console.log(resp.data);
-                }).catch(resp => {
-                    console.log('请求失败：'+resp.status+','+resp.statusText);
+                }).then(function (response) {
+                        console.log(response);
+                }).catch(function (error) {
+                        console.log(error);
                 });
             }
         }
