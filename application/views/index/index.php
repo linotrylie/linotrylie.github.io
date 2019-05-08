@@ -9,6 +9,7 @@
     <!-- import CSS -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
+
         .el-header, .el-footer {
             background-color: #B3C0D1;
             color: #333;
@@ -25,6 +26,7 @@
             margin: 0 auto 0 auto;
         }
         body > .el-container {
+            margin: auto 0 auto 0;
             margin-bottom: 40px;
         }
     </style>
@@ -32,7 +34,7 @@
 <body>
 <div id="app">
 <el-container>
-    <el-header>文件批量修改器</el-header>
+    <el-header>文件批量修改器----<?php echo $copy;?></el-header>
     <el-main>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item>
@@ -49,9 +51,27 @@
                     <?php endforeach;?>
                 </el-select>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-form-item label="插入位置">
+                <el-select v-model="formInline.location" placeholder="搜索区域">
+                    <el-option label="顶部" value="1"></el-option>
+                    <el-option label="底部" value="0"></el-option>
+                </el-select>
             </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">插入</el-button>
+            </el-form-item>
+            <br>
+            <el-form-item label="插入代码">
+                <el-input
+                  type="textarea"
+                  :rows="10"
+                  :cols="60"
+                  placeholder="请输入内容"
+                  v-model="formInline.code">
+                </el-input>
+               
+            </el-form-item>
+
         </el-form>
         <template>
             <el-table
@@ -76,7 +96,7 @@
             </el-table>
         </template>
     </el-main>
-    <el-footer><?php echo $copy;?></el-footer>
+    <!-- <el-footer></el-footer> -->
 </el-container>
 </div>
 </body>
@@ -92,11 +112,13 @@
                 formInline: {
                     filename: '',
                     path:'',
+                    code:'',
+                    location:'',
                     passport:"<?php echo $rsf;?>"
                 },
                 tableData: [{
                     filename: 'index.html',
-                    ext: '.html',
+                    ext: 'html',
                     status:'成功'
                 }]
             }
@@ -107,16 +129,19 @@
                     params: {
                         filename:this.formInline.filename,
                         path: this.formInline.path,
+                        code:this.formInline.code,
+                        location:this.formInline.location,
                         passport:this.formInline.passport
                     }
-                }).then(function (response) {
-                        console.log(response);
+                }).then(result => {
+                        console.log(result.data.result);
+                       this.tableData = result.data.result;
                 }).catch(function (error) {
                         console.log(error);
                 });
             }
         }
-    }
+    } 
     var Ctor = Vue.extend(Main)
     new Ctor().$mount('#app')
 </script>

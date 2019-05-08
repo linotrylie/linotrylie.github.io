@@ -1,6 +1,16 @@
-# nginx rewrite rule
-rewrite ^(.*?)/article/.*?-(\d+)-(\d+)\.html$ $1/show.html?id=$2&page=$3 break;
-rewrite ^(.*?)/category/.*?-(\d+)-(\d+)\.html$ $1/list.html?id=$2&page=$3 break;
-rewrite ^(.*?)/tag/([^/]+)/?$ $1/tag.html?w=$2 break; <span id="more-1758"></span>
-rewrite ^(.*?)/tag/([^/]+)/(\d+)$ $1/tag.html?w=$2&page=$3 break;
-# end nginx rewrite rule
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
