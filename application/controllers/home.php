@@ -18,6 +18,7 @@
         public function __construct() {
             parent::__construct();
             $this->load->library('session');
+            $this->load->helper('util_helper');
         }
 
         public function index(){
@@ -43,8 +44,12 @@
 
         public function searchfile(){
             if($this->session->rsf !== $_GET['passport']) return false;
-            $data = $_GET['path'];
-
-            var_dump($data);
+            $newpath = $_GET['path'];
+            $filename = $_GET['filename'];
+            $arr = array(
+                'path'=>$newpath,
+                'filename'=>$filename
+            );
+            _ars($arr,true);
         }
     }

@@ -21,7 +21,9 @@
             text-align: center;
             height: 500px;
         }
-
+        .el-table{
+            margin: 0 auto 0 auto;
+        }
         body > .el-container {
             margin-bottom: 40px;
         }
@@ -51,6 +53,28 @@
                 <el-button type="primary" @click="onSubmit">查询</el-button>
             </el-form-item>
         </el-form>
+        <template>
+            <el-table
+                    :data="tableData"
+                    stripe
+                    style="width: 50%">
+                <el-table-column
+                        prop="filename"
+                        label="文件名"
+                        width="300%">
+                </el-table-column>
+                <el-table-column
+                        prop="ext"
+                        label="类型"
+                        width="300%">
+                </el-table-column>
+                <el-table-column
+                        prop="status"
+                        label="状态"
+                        width="300%">
+                </el-table-column>
+            </el-table>
+        </template>
     </el-main>
     <el-footer><?php echo $copy;?></el-footer>
 </el-container>
@@ -69,7 +93,12 @@
                     filename: '',
                     path:'',
                     passport:"<?php echo $rsf;?>"
-                }
+                },
+                tableData: [{
+                    filename: 'index.html',
+                    ext: '.html',
+                    status:'成功'
+                }]
             }
         },
         methods: {
