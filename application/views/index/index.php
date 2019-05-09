@@ -20,7 +20,7 @@
             background-color: #E9EEF3;
             color: #333;
             text-align: center;
-            height: 500px;
+            height: auto;
         }
         .el-table{
             margin: 0 auto 0 auto;
@@ -58,7 +58,11 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">插入</el-button>
+                <el-button
+                        v-loading.fullscreen.lock="fullscreenLoading"
+                        type="primary"
+                        @click="onSubmit">
+                    插入</el-button>
             </el-form-item>
             <br>
             <el-form-item label="插入代码">
@@ -74,6 +78,7 @@
 
         </el-form>
         <template>
+            <p v-if="textData > 1">本次共修改文件{{textData}}个</p>
             <el-table
                     :data="tableData"
                     stripe
@@ -120,11 +125,22 @@
                     filename: 'index.html',
                     ext: 'html',
                     status:'成功'
-                }]
+                }],
+                fullscreenLoading: false,
+                textData:'0'
             }
         },
         methods: {
             onSubmit() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                },5000);
                 axios.get('/stasf/sesdfc', {
                     params: {
                         filename:this.formInline.filename,
@@ -134,8 +150,8 @@
                         passport:this.formInline.passport
                     }
                 }).then(result => {
-                        console.log(result.data.result);
-                       this.tableData = result.data.result;
+                       this.tableData = result.data.result.file;
+                       this.textData = result.data.result.count;
                 }).catch(function (error) {
                         console.log(error);
                 });

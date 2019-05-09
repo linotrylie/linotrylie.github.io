@@ -56,7 +56,8 @@
             $code = trim($_GET['code']);
             $location = $_GET['location'];
             $array = $this->pregfile($filename,$newpath,$code,$location);
-            $arr = $this->fi;
+            $arr['file'] = $this->fi;
+            $arr['count'] = count($this->fi);
             _ars($arr,true);
         }
 
