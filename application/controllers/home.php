@@ -14,7 +14,7 @@
      */
     class Home extends CI_Controller
     {
-        private $path = 'F:\\';//目录
+        private $path = 'D:\\';//目录
         public $fi = array();
         public function __construct() {
             parent::__construct();
